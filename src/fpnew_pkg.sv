@@ -12,7 +12,8 @@
 // SPDX-License-Identifier: SHL-0.51
 
 // Author: Stefan Mach <smach@iis.ee.ethz.ch>
-
+`ifndef FPNEW_PKG_SV_
+`define FPNEW_PKG_SV_
 package fpnew_pkg;
 
   // ---------
@@ -510,3 +511,4 @@ package fpnew_pkg;
   endfunction
 
 endpackage
+`endif
