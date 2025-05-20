@@ -14,6 +14,7 @@
 // Author: Stefan Mach <smach@iis.ee.ethz.ch>
 
 `include "common_cells/registers.svh"
+`include "fpnew_pkg.sv"
 
 module fpnew_cast_multi #(
   parameter fpnew_pkg::fmt_logic_t   FpFmtConfig  = '1,
