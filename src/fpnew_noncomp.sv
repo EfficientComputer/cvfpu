@@ -98,7 +98,7 @@ module fpnew_noncomp #(
   AuxType                [0:NUM_INP_REGS]                 inp_pipe_aux_q;
   logic                  [0:NUM_INP_REGS]                 inp_pipe_valid_q;
   // Ready signal is combinatorial for all stages
-  logic [0:NUM_INP_REGS] inp_pipe_ready;
+  logic [0:NUM_INP_REGS] inp_pipe_ready /*verilator split_var*/;
 
   // Input stage: First element of pipeline is taken from inputs
   assign inp_pipe_operands_q[0] = operands_i;
