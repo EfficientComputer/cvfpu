@@ -103,12 +103,20 @@ module fpnew_opgroup_block #(
       logic [INTERNAL_LANES-1:0] mask_slice;
       always_comb for (int b = 0; b < INTERNAL_LANES; b++) mask_slice[b] = simd_mask_i[(NUM_LANES/INTERNAL_LANES)*b];
 
+      // EFF EDIT: This is added to work around an issue with Cadence Conformal
+      if (FmtPipeRegs[fmt] != 1) begin : g_fatal_pipe_regs
+          initial begin
+              $error("FmtPipeRegs[fmt] must be == 1 due to a shortcoming in Conformal. See https://efficientcomputer.atlassian.net/browse/ENG-1771");
+              $fatal();
+          end
+      end
+
       fpnew_opgroup_fmt_slice #(
         .OpGroup       ( OpGroup          ),
         .FpFormat      ( FpFormat         ),
         .Width         ( Width            ),
         .EnableVectors ( EnableVectors    ),
-        .NumPipeRegs   ( FmtPipeRegs[fmt] ),
+        .NumPipeRegs   ( 1 ), //EFF EDIT: Used to be FmtPipeRegs[fmt] but need to work around Conformal, see above
         .PipeConfig    ( PipeConfig       ),
         .TagType       ( TagType          ),
         .TrueSIMDClass ( TrueSIMDClass    )
@@ -174,6 +182,13 @@ module fpnew_opgroup_block #(
     logic in_valid;
 
     assign in_valid = in_valid_i & (FmtUnitTypes[dst_fmt_i] == fpnew_pkg::MERGED);
+    // EFF EDIT: This is added to work around an issue with Cadence Conformal
+    if (REG != 1) begin : g_fatal_pipe_regs
+        initial begin
+            $error("REG must be == 1 due to a shortcoming in Conformal. See https://efficientcomputer.atlassian.net/browse/ENG-1771");
+            $fatal();
+        end
+    end
 
     fpnew_opgroup_multifmt_slice #(
       .OpGroup       ( OpGroup          ),
@@ -182,7 +197,7 @@ module fpnew_opgroup_block #(
       .IntFmtConfig  ( IntFmtMask       ),
       .EnableVectors ( EnableVectors    ),
       .DivSqrtSel    ( DivSqrtSel       ),
-      .NumPipeRegs   ( REG              ),
+      .NumPipeRegs   ( 1                ), //EFF EDIT: Used to be REG but need to work around an issue with Cadence Conformal
       .PipeConfig    ( PipeConfig       ),
       .TagType       ( TagType          )
     ) i_multifmt_slice (
