@@ -104,12 +104,14 @@ module fpnew_opgroup_block #(
       always_comb for (int b = 0; b < INTERNAL_LANES; b++) mask_slice[b] = simd_mask_i[(NUM_LANES/INTERNAL_LANES)*b];
 
       // EFF EDIT: This is added to work around an issue with Cadence Conformal
+`ifndef VERILATOR
       if (FmtPipeRegs[fmt] != 1) begin : g_fatal_pipe_regs
           initial begin
               $error("FmtPipeRegs[fmt] must be == 1 due to a shortcoming in Conformal. See https://efficientcomputer.atlassian.net/browse/ENG-1771");
               $fatal();
           end
       end
+`endif
 
       fpnew_opgroup_fmt_slice #(
         .OpGroup       ( OpGroup          ),
@@ -183,12 +185,14 @@ module fpnew_opgroup_block #(
 
     assign in_valid = in_valid_i & (FmtUnitTypes[dst_fmt_i] == fpnew_pkg::MERGED);
     // EFF EDIT: This is added to work around an issue with Cadence Conformal
+`ifndef VERILATOR
     if (REG != 1) begin : g_fatal_pipe_regs
         initial begin
             $error("REG must be == 1 due to a shortcoming in Conformal. See https://efficientcomputer.atlassian.net/browse/ENG-1771");
             $fatal();
         end
     end
+`endif
 
     fpnew_opgroup_multifmt_slice #(
       .OpGroup       ( OpGroup          ),
